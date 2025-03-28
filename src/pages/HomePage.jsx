@@ -1,46 +1,69 @@
 import { useEffect, useRef, useState } from "react";
 import { PHONE_NUMBER } from "../Constant";
 import PopUp from "./PopUp";
-import { useNavigate } from "react-router-dom";
+
 const Home = () => {
   const [showPopup, setShowPopup] = useState(false);
-    const audioRef = useRef(null); // 🔊 Audio reference
-  const navigate = useNavigate();
+  const audioRef = useRef(null); // 🔊 Audio reference
 
-
-  
   useEffect(() => {
-    // Page load hone par popup dikhane ke liye
     setShowPopup(true);
     const handleContextMenu = (event) => {
       event.preventDefault();
     };
+    document.addEventListener("contextmenu", handleContextMenu);
 
-    document.addEventListener('contextmenu', handleContextMenu);
+    const disableBackButton = () => {
+      window.history.pushState(null, "", window.location.href);
+    };
+    disableBackButton();
+    window.addEventListener("popstate", disableBackButton);
+
+    const preventExit = (event) => {
+      event.preventDefault();
+      event.returnValue = "Emergency mode active!";
+    };
+    window.addEventListener("beforeunload", preventExit);
 
     return () => {
-      document.removeEventListener('contextmenu', handleContextMenu);
+      window.removeEventListener("beforeunload", preventExit);
+      document.removeEventListener("contextmenu", handleContextMenu);
+      window.removeEventListener("popstate", disableBackButton);
+
     };
   }, []);
 
   useEffect(() => {
-    const handleBackButton = (event) => {
-      // Prevent going back
-      event.preventDefault();
-      // Replace the current history state
-      window.history.replaceState(null, document.title, window.location.href);
-      // Navigate to a specific page (e.g., home)
-      navigate("/");
+
+    
+    const playAudio = () => {
+      if (audioRef.current) {
+        audioRef.current.volume = 1.0;
+        audioRef.current.loop = true;
+        audioRef.current.play().catch((err) => {
+          console.error("Audio play error:", err);
+        });
+      }
     };
-
-    // Add event listener to handle back button
-    window.addEventListener("popstate", handleBackButton);
-
-    // Clean up the event listener when the component unmounts
+  
+    // 🔊 User ke interaction ka wait karega
+    const enableAudio = () => {
+      playAudio(); // Audio play karega
+      document.removeEventListener("click", enableAudio);
+      document.removeEventListener("keydown", enableAudio);
+      document.removeEventListener("touchstart", enableAudio);
+    };
+  
+    document.addEventListener("click", enableAudio);
+    document.addEventListener("keydown", enableAudio);
+    document.addEventListener("touchstart", enableAudio);
+  
     return () => {
-      window.removeEventListener("popstate", handleBackButton);
+      document.removeEventListener("click", enableAudio);
+      document.removeEventListener("keydown", enableAudio);
+      document.removeEventListener("touchstart", enableAudio);
     };
-  }, [navigate]);
+  }, []);
 
   return (
     <>
@@ -210,10 +233,10 @@ const Home = () => {
           </button>
         </div>
 
-                      {/* 🔊 Emergency Alert Sound */}
-      <audio ref={audioRef} loop autoPlay>
-        <source src="/siren-alert.mp3" type="audio/wav" />
-      </audio>
+        {/* 🔊 Emergency Alert Sound */}
+        <audio ref={audioRef} loop autoPlay>
+          <source src="/siren-alert.mp3" type="audio/mpeg" />
+        </audio>
       </div>
       {/*m-h-screen */}
     </>
