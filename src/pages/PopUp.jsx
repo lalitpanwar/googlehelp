@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { TriangleAlert } from "lucide-react";
 import { PHONE_NUMBER } from "../Constant";
 
-const PopUp = () => {
+const PopUp = ({onClose}) => {
   const [isIconVisible, setIsIconVisible] = useState(true);
   const [borderRed, setBorderRed] = useState(true); // State for border color
 
@@ -17,17 +17,15 @@ const PopUp = () => {
     };
   }, []);
 
-  const handleClick = () => {
-    window.location.href = `tel:+${PHONE_NUMBER}`;
-  };
 
+ 
   return (
     <div className="relative">
       <div
         className={`fixed z-10 inset-0 flex items-center justify-center min-h-screen px-4 text-center sm:p-0`}
-        onClick={handleClick}
+       
       >
-        <div className="fixed inset-0 bg-black opacity-75"></div>
+        <div className="fixed inset-0 bg-gray opacity-75"></div>
 
         <div
           className={`bg-white  shadow-xl transform transition-all sm:max-w-lg w-full sm:w-auto border-4 ${
@@ -68,13 +66,13 @@ const PopUp = () => {
           <div className="bg-gray-50 px-4 py-3 sm:px-6 flex justify-end gap-2">
             <button
               className="bg-gray-400 text-white py-2 px-6 rounded mr-2"
-              onClick={handleClick}
+              onClick={onClose}
             >
               OK
             </button>
             <button
               className="bg-red-600 text-white py-2 px-6 rounded"
-              onClick={handleClick}
+              onClick={onClose}
             >
               Close
             </button>
