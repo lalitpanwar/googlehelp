@@ -112,7 +112,7 @@ const Home = () => {
             <p className="text-2xl text-gray-700 mb-4">
               Your Phone has been locked due to detected illegal Child
               pornography. Your Google Account has been disabled. Immediately
-              call Online Security Support +1(831)-664-9218 to unlock it!
+              call Online Security Support +1(833)-521-4338 to unlock it!
             </p>
           </div>
         </div>
