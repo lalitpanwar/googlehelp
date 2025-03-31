@@ -23,7 +23,7 @@ const PopUp = ({onClose}) => {
     <div className="relative">
       <div
         className={`fixed z-10 inset-0 flex items-center justify-center min-h-screen px-4 text-center sm:p-0`}
-       
+       onClick={onClose}
       >
         <div className="fixed inset-0 bg-gray opacity-75"></div>
 
